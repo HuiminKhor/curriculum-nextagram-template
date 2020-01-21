@@ -8,6 +8,7 @@ users_blueprint = Blueprint('users',
 
 @users_blueprint.route('/new', methods=['GET'])
 def new():
+
     return render_template('users/new.html')
 
 
