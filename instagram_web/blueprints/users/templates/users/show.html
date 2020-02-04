@@ -1,0 +1,65 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+<div>
+    <h1>Profile Page</h1>
+    </br>
+    <h2>{{user.name}}</h2>
+    <h5>{{user.email}}</h5>
+    <br/>
+    <h3> <ion-icon name="walk"></ion-icon> Following: {{user.get_following() | length }}</h3>
+    <h3> <ion-icon name="people"></ion-icon> Followers: {{user.get_followers() | length }}</h3>
+
+    {% if current_user.is_authenticated and current_user.id != user.id %}
+
+    {% if current_user.is_following(user) %}
+    <a href ="{{ url_for('follow.unfollow', user_id=user.id)}}" class="btn btn-danger"><i class="material-icons md-18" >person_add_disabled</i></ion-icon> UNFOLLOW</a>
+    {% elif current_user.is_requesting(user) %}
+    <a href="{{ url_for('follow.cancel', user_id=user.id)}}" class="btn btn-warning">Cancel request</a>
+    {% else %}
+    <a href="{{ url_for('follow.follow', user_id=user.id)}}" class="btn btn-success"><ion-icon name="person-add"></ion-icon> FOLLOW</a>
+    {% endif %}
+
+    {% endif %}
+
+    <hr>
+    <br/>
+    <img src="{{aws_domain}}{{user.profileimg}}" class="rounded-circle" height="500" width="500"/> 
+    <br/>
+</div>
+
+    
+<div class="row">
+    {% for image in user.images %}
+        <div class="card mb-2 mx-2">
+            <img src="{{aws_domain}}{{image.filename}}" height="330" width="330"/>
+            <div class="card-footer">
+                <a href="{{ url_for('payments.new', image_id=image.id)}}" class="btn btn-primary">Donate &hearts;</a>
+                <small class="text-muted">{{ image.updated_at }}</small>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+{#{% for image in user.images %}
+<div class="card-deck">
+    <div class="row row-cols-1 row-cols-md-2 mb-4">
+        <div class="card">
+            <img src="{{aws_domain}}{{image.filename}}" height="330" width="330"/>
+            <div class="card-footer">
+            <a href="{{ url_for('payments.new', image_id=image.id)}}" class="btn btn-primary">Donate &hearts;</a>
+            <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+    </div>
+</div>        
+{% endfor %}#}
+
+
+
+{% endblock %} 
+

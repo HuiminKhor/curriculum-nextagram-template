@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"rel="stylesheet">
+    <link rel="shortcut icon" href="https://www.freepnglogos.com/uploads/instagram-logos-png-images-free-download-2.png">
 
     {% assets "home_css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}">
@@ -24,8 +25,9 @@
 
   </head>
   <body>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">NEXTAGRAM</a>
+      <a class="navbar-brand" href="#"> <i class="icon ion-logo-instagram"></i> NEXTAGRAM</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -33,22 +35,38 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{{url_for('home')}}">Home <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Users</a>
+          {% if current_user.is_authenticated %}
+         
+          <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('follow.show')}}">Activity</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
+              More
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Sign in</a>
-              <a class="dropdown-item" href="#">Sign up</a>
+              <a class="dropdown-item" href="{{url_for('users.edit')}}">Edit Profile</a>
+              <a class="dropdown-item" href="{{url_for('images.new')}}">Upload Image</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item" href="{{url_for('session.logout')}}">Logout</a>
             </div>
           </li>
+          {% else %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Log in/out
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{url_for('session.new')}}">Log in</a>
+              <a class="dropdown-item" href="{{url_for('users.new')}}">Sign up</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{url_for('session.google')}}">
+                <img src="https://img.icons8.com/plasticine/2x/google- logo.png" height="20px" width="20px"/>oogle Login</a>
+            </div>
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li>
@@ -59,10 +77,17 @@
         </form>
       </div>
     </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+          <div class="alert alert-{{category}}" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     {% block content %}
     {% endblock %}
     <footer>
-      Made with &hearts; at <a target="_blank" href="https://www.nextacademy.com/?utm_source=github&utm_medium=student-challenge&utm_campaign=flask-nextagram">NEXT Academy</a>
     </footer>
   </body>
 </html>

@@ -1,0 +1,24 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+
+<h2>Request</h2>
+{% for user in current_user.get_requests() %}
+<p> {{ user.name }} | <a href="{{ url_for ('follow.approve', user_id=user.id)}}" class="btn btn-primary" >Approve</a> |
+    <a href="{{ url_for('follow.reject', user_id=user.id) }}" class="btn btn-secondary" >Reject</a>     
+</p>
+{% endfor %}
+<h2>Followers</h2>
+
+<h2>Following</h2>
+{% for user in current_user.get_following() %}
+<p> {{ user.name }} | <a href="{{ url_for ('follow.unfollow', user_id=user.id)}}" class="btn btn-danger" >Unfollow</a> </p>
+{% endfor %}
+
+<h2>Requesting</h2>
+{% for user in current_user.get_requesting() %}
+<p> {{ user.name }} | <a href="{{ url_for ('follow.cancel', user_id=user.id)}}" class="btn btn-warning" >Cancel Request</a> </p>
+{% endfor %}
+
+
+{% endblock %}
